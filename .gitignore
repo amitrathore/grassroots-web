@@ -1,0 +1,13 @@
+*~
+*#*
+.clojure.conf
+.classpath
+.project
+config/config.clj
+scripts/furtive
+logs/*
+.DS_Store
+*flymake.js
+all.js
+furtive.iml
+.idea
