@@ -51,9 +51,11 @@ $(document).ready(function () {
 
 // http://bosh.metajack.im:5280/xmpp-httpbind
 // http://lookingglass.local:5280/xmpp-httpbind
+// http://lookingglass.local:5280/http-bind
 $(document).bind('connect', function (ev, data) {
     var conn = new Strophe.Connection(
-        "http://lookingglass.local:5280/http-bind");
+        "http://lookingglass.local:5280/http-bind"
+);
 
     conn.connect(data.jid, data.password, function (status) {
         if (status === Strophe.Status.CONNECTED) {
