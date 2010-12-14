@@ -1,11 +1,21 @@
 GrassrootsHome = {
     init: function() {
         GrassrootsUtils.log('GrassrootsHome: Init');
-        this.create_skeleton();
-        $('#gr_tabs').tabs();
+
+        GrassrootsRoster.get_roster(GrassrootsRoster.on_roster, GrassrootsRoster.on_roster_changed);
+        GrassrootsUtils.log('GrassrootsHome: Init: asked for roster');
+        var fake_fn = function(p) {
+            alert('GConn send_pres!')
+        };
+
+        GrassrootsUtils.log('GrassrootsHome: Init: sending presence...');
+        GrassrootsConnection.send_presence(fake_fn);
+
+        this.create_tabs();
+        GrassrootsGroupsTab.init();        
     },
 
-    create_skeleton: function() {
+    create_tabs: function() {
         var gr_tabs = $('<div id=gr_tabs>');
         gr_tabs.appendTo('#grassroots_content');
 
@@ -15,6 +25,8 @@ GrassrootsHome = {
         this.create_grassroots_tab('#gr_tab_home', 'Groups', gr_tab_names);
         this.create_grassroots_tab('#gr_tab_invites','Invites',  gr_tab_names);
         this.create_grassroots_tab('#gr_tab_settings', 'Settings', gr_tab_names);
+
+        $('#gr_tabs').tabs();
     },
 
     create_grassroots_tab: function(tab_link_id, tab_link_text, tab_ul) {

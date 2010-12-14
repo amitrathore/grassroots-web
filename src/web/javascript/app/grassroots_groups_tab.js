@@ -1,0 +1,5 @@
+GrassrootsGroupsTab = {
+    init: function() {
+        
+    }
+};

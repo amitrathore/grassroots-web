@@ -1,6 +1,6 @@
 GrassrootsConnection = {
     new_connection: function() {
-        return new Strophe.Connection("http://lookingglass.local:5280/http-bind");
+        return new Strophe.Connection(Grassroots.bosh_http_url);
     },
 
     process_login: function(ev, data) {
@@ -14,6 +14,7 @@ GrassrootsConnection = {
         conn.connect(jid, password, function(status) {
             if (status === Strophe.Status.CONNECTED) {
                 GrassrootsUtils.log('GrassrootsConnection: login: CONNECTED!');
+                Grassroots.jid = jid;
                 $(document).trigger(on_connect_trigger);
             } 
             else if (status === Strophe.Status.DISCONNECTED) {
@@ -21,6 +22,12 @@ GrassrootsConnection = {
             }
         });
         Grassroots.connection = conn;
+    },
+
+    send_presence: function(on_presence) {
+        GrassrootsUtils.log("GrassrootsConnection: send_presence!");
+        Grassroots.connection.addHandler(on_presence, null, "presence");
+        Grassroots.connection.send($pres());
     },
 
     disconnected: function() {

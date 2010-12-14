@@ -7,5 +7,9 @@ GrassrootsUtils = {
         if (window.console) {
             console.log(message);
         }
+    },
+
+    username_from_jid: function(full_jid) {
+        return full_jid.split(".")[0];
     }
 };
