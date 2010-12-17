@@ -5,13 +5,14 @@ GrassrootsHome = {
         GrassrootsRoster.get_roster(GrassrootsRoster.on_roster, GrassrootsRoster.on_roster_changed);
         GrassrootsUtils.log('GrassrootsHome: Init: asked for roster');
         var fake_fn = function(p) {
-            alert('GConn send_pres!')
+            GrassrootsUtils.log('GConn send_pres: on_presence!')
         };
 
         GrassrootsUtils.log('GrassrootsHome: Init: sending presence...');
         GrassrootsConnection.send_presence(fake_fn);
 
         this.create_tabs();
+        GrassrootsUtils.log('GrassrootsHome: Init: tabs created');
         GrassrootsGroupsTab.init();        
     },
 
@@ -25,6 +26,8 @@ GrassrootsHome = {
         this.create_grassroots_tab('#gr_tab_home', 'Groups', gr_tab_names);
         this.create_grassroots_tab('#gr_tab_invites','Invites',  gr_tab_names);
         this.create_grassroots_tab('#gr_tab_settings', 'Settings', gr_tab_names);
+
+        gr_tabs.append('<div id=gr_tabs_content>');
 
         $('#gr_tabs').tabs();
     },

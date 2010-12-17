@@ -15,6 +15,7 @@ GrassrootsConnection = {
             if (status === Strophe.Status.CONNECTED) {
                 GrassrootsUtils.log('GrassrootsConnection: login: CONNECTED!');
                 Grassroots.jid = jid;
+                Grassroots.username = GrassrootsUtils.username_from_jid(jid);
                 $(document).trigger(on_connect_trigger);
             } 
             else if (status === Strophe.Status.DISCONNECTED) {
@@ -22,6 +23,9 @@ GrassrootsConnection = {
             }
         });
         Grassroots.connection = conn;
+        //Grassroots.connection.rawInput = console.log;
+        //Grassroots.connection.rawOutput = console.log;
+
     },
 
     send_presence: function(on_presence) {
