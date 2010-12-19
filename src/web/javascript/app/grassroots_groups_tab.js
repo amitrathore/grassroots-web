@@ -9,6 +9,7 @@ GrassrootsGroupsTab = {
         var tabs_content = $('#gr_tabs_content');
         this.append_toolbar(tabs_content);
         this.append_owned_groups(tabs_content);
+        Grassroots.connection.addHandler(GrassrootsGroupsTab.on_presence, null, "presence");
     },
 
     append_toolbar: function(tabs_content) {
@@ -49,6 +50,7 @@ GrassrootsGroupsTab = {
     },
 
     handle_group_joined: function(presence) {
+        PPP = presence;
         GrassrootsUtils.log('GrassrootsGroupsTab: handle_group_joined!');
         var from = $(presence).attr('from');
         var room = GrassrootsUtils.username_from_jid(from);
@@ -60,8 +62,8 @@ GrassrootsGroupsTab = {
             nicks[room] = nick;
         }
 
-        if (room_jid === from) {
-            GrassrootsUtils.log('JOIN COMPLETE!');
+        if (room_jid === from) { //&& $(presence).attr('type') !== 'unavailable'
+            GrassrootsUtils.log('GrassrootsGroupsTab: handle_group_joined: joining ' + room + ' complete!');
             GrassrootsGroupsTab.load_room_if_needed(room);        
         }
     },
@@ -93,8 +95,6 @@ GrassrootsGroupsTab = {
         var full_group_name = group_name + "@" + Grassroots.ubernet_conf;
         var p = $pres({to: full_group_name + "/" + Grassroots.username})
             .c('x', {xmlns: GrassrootsGroupsTab.NS_MUC});
-        Grassroots.connection.addHandler(GrassrootsGroupsTab.on_presence, null, "presence");
-
         Grassroots.connection.send(p);
     }
 };
