@@ -1,5 +1,6 @@
 GrassrootsConnection = {
     new_connection: function() {
+        GrassrootsUtils.log('GrassrootsConnection: new');
         return new Strophe.Connection(Grassroots.bosh_http_url);
     },
 
@@ -12,6 +13,7 @@ GrassrootsConnection = {
         GrassrootsUtils.log('GrassrootsConnection: login: connecting with ' + jid + " , " + password);
         var conn = this.new_connection();
         conn.connect(jid, password, function(status) {
+            GrassrootsUtils.log('GrassrootsConnection: login callback!');
             if (status === Strophe.Status.CONNECTED) {
                 GrassrootsUtils.log('GrassrootsConnection: login: CONNECTED!');
                 Grassroots.jid = jid;

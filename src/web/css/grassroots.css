@@ -1,16 +1,15 @@
-/* @override http://grassrootsweb.com/css/grassroots.css */
-
 #gr_tabs {
-	width: 60%;
-	margin-left: 20%;
-	margin-right: 20%;
-	margin-top: 16px;
-	height: 100%;	
+   width: 60%;
+   margin-left: 20%;
+   margin-right: 20%;
+   margin-top: 16px;
+   height: 100%;	
 }
 
 #gr_tabs_toolbar {
-	margin-top: 10%;
-	margin-left: 40px;
-	font-size: small;
-	background-color: #fef4ed;
+   margin-top: 10%;
+   margin-left: 40px;
+   font-size: small;
+   background-color: #fef4ed;
+   padding: 4px;
 }

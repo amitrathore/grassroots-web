@@ -2,7 +2,8 @@ GrassrootsGroupsTab = {
     NS_MUC: "http://jabber.org/protocol/muc",
     group_participants: {},
     nicks: {},
-    loaded_rooms: {},
+    joined_rooms: {},
+    current_room: null,
 
     init: function() {
         GrassrootsUtils.log('GrassrootsGroupsTab: init');
@@ -64,12 +65,23 @@ GrassrootsGroupsTab = {
 
         if (room_jid === from) { //&& $(presence).attr('type') !== 'unavailable'
             GrassrootsUtils.log('GrassrootsGroupsTab: handle_group_joined: joining ' + room + ' complete!');
+            GrassrootsGroupsTab.joined_rooms[room] = true;
             GrassrootsGroupsTab.load_room_if_needed(room);        
         }
     },
 
     load_room_if_needed: function(room) {
         GrassrootsUtils.log('GrassrootsGroupsTab: load_room_if_needed!');
+        if (GrassrootsGroupsTab.current_room === room) {
+            return true;
+        }
+
+        GrassrootsGroupsTab.current_room = room;
+        var group_main = $('<div id=groups_tab_main>');
+        var group_title = $('<div id=group_title>' + room + '</div>');
+        group_main.append(group_title);
+
+        $('#groups_tab_main').replaceWith(group_main);
     },
 
     on_presence: function(presence) {
