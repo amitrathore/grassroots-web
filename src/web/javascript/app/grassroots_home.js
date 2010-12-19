@@ -3,17 +3,20 @@ GrassrootsHome = {
         GrassrootsUtils.log('GrassrootsHome: Init');
 
         GrassrootsRoster.get_roster(GrassrootsRoster.on_roster, GrassrootsRoster.on_roster_changed);
-        GrassrootsUtils.log('GrassrootsHome: Init: asked for roster');
-        var fake_fn = function(p) {
-            GrassrootsUtils.log('GConn send_pres: on_presence!')
-        };
 
-        GrassrootsUtils.log('GrassrootsHome: Init: sending presence...');
-        GrassrootsConnection.send_presence(fake_fn);
+        GrassrootsUtils.log('GrassrootsHome: Init: asked for roster and sending presence...');
+        GrassrootsConnection.send_presence(GrassrootsHome.on_presence);
 
         this.create_tabs();
         GrassrootsUtils.log('GrassrootsHome: Init: tabs created');
         GrassrootsGroupsTab.init();        
+    },
+
+    on_presence: function(presence) {
+        var to = $(presence).attr('to');
+        GrassrootsUtils.log('GrassrootsHome: on_presence: to: ' + to);        
+        Grassroots.full_jid = to;
+        Grassroots.resource = Strophe.getResourceFromJid(to);
     },
 
     create_tabs: function() {

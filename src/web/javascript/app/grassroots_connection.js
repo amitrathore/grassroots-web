@@ -23,9 +23,8 @@ GrassrootsConnection = {
             }
         });
         Grassroots.connection = conn;
-        //Grassroots.connection.rawInput = console.log;
-        //Grassroots.connection.rawOutput = console.log;
-
+        Grassroots.connection.rawInput = console.log;
+        Grassroots.connection.rawOutput = console.log;
     },
 
     send_presence: function(on_presence) {

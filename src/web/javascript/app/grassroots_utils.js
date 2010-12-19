@@ -11,5 +11,9 @@ GrassrootsUtils = {
 
     username_from_jid: function(full_jid) {
         return full_jid.split('@')[0];
+    },
+
+    room_jid: function(room_name, nick_name) {
+        return room_name + "@" + Grassroots.ubernet_conf + "/" + nick_name;
     }
 };
