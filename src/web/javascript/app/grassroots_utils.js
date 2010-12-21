@@ -15,5 +15,17 @@ GrassrootsUtils = {
 
     room_jid: function(room_name, nick_name) {
         return room_name + "@" + Grassroots.ubernet_conf + "/" + nick_name;
+    },
+
+    full_group_name: function(group_name) {
+        return group_name + "@" + Grassroots.ubernet_conf;
+    },
+
+    make_id: function() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
     }
 };

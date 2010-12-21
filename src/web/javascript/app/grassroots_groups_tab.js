@@ -65,9 +65,29 @@ GrassrootsGroupsTab = {
 
         if (room_jid === from) { //&& $(presence).attr('type') !== 'unavailable'
             GrassrootsUtils.log('GrassrootsGroupsTab: handle_group_joined: joining ' + room + ' complete!');
-            GrassrootsGroupsTab.joined_rooms[room] = true;
-            GrassrootsGroupsTab.load_room_if_needed(room);        
+            if ($(presence).find("status[code='201']").length > 0) {
+                GrassrootsGroupsTab.configure_room(room);
+            }
         }
+
+        GrassrootsGroupsTab.load_room_if_needed(room_name);        
+        return true;
+    },
+
+    configure_room: function(room_name) {
+        GrassrootsUtils.log('GrassrootsGroupsTab: configure_room');
+        var muc_config_url = Grassroots.web_url + "/room_config";
+        var config_data = {
+            id: GrassrootsUtils.make_id(),
+            to: GrassrootsUtils.full_group_name(room_name),
+            roomname: GrassrootsUtils.full_group_name(room_name),
+            roomdesc: room_name + " room for Grassroots."
+        };
+        $.get(muc_config_url, config_data, function(config_xml) {
+            GrassrootsUtils.log('GrassrootsGroupsTab: configure_room: callback!');
+            GrassrootsGroupsTab.joined_rooms[room_name] = true;
+            Grassroots.connection.send($(config_xml));
+        });
     },
 
     load_room_if_needed: function(room) {
@@ -80,6 +100,9 @@ GrassrootsGroupsTab = {
         var group_main = $('<div id=groups_tab_main>');
         var group_title = $('<div id=group_title>' + room + '</div>');
         group_main.append(group_title);
+
+        var group_messages = $('<div id=groups_tab_messages>');
+        group_main.append(group_messages);
 
         $('#groups_tab_main').replaceWith(group_main);
     },
@@ -103,8 +126,9 @@ GrassrootsGroupsTab = {
     },
 
     create_new_group: function(group_name) {
-        GrassrootsUtils.log('GrassrootsGroupTab: create_new_group');
-        var full_group_name = group_name + "@" + Grassroots.ubernet_conf;
+        var full_group_name = GrassrootsUtils.full_group_name(group_name);
+        GrassrootsUtils.log('GrassrootsGroupTab: create_new_group: ' + full_group_name);
+
         var p = $pres({to: full_group_name + "/" + Grassroots.username})
             .c('x', {xmlns: GrassrootsGroupsTab.NS_MUC});
         Grassroots.connection.send(p);
