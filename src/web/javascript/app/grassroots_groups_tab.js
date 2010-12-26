@@ -63,9 +63,18 @@ GrassrootsGroupsTab = {
         sidebar.empty();
         sidebar.append($('<h2>Your groups</h2>'));
         $.each(Grassroots.group_names, function(i, full_name) {
-            var group_item = $('<div class=owned_group_name>').text(GrassrootsUtils.username_from_jid(full_name));
+            var group_name = GrassrootsUtils.username_from_jid(full_name);
+            var group_item = $('<div class=owned_group_name>').text(group_name);
+            group_item.click(function () {
+                GrassrootsGroupsTab.switch_to_group(group_name)
+            });
             sidebar.append(group_item);
         });
+    },
+
+    switch_to_group: function(group_name) {
+        GrassrootsUtils.log('GrassrootsGroupsTab: switching to ' + group_name);
+        GrassrootsGroupsTab.load_room_if_needed(group_name);
     },
 
     handle_group_joined: function(presence) {
@@ -131,7 +140,22 @@ GrassrootsGroupsTab = {
         var group_messages = $('<div id=groups_tab_messages>');
         group_main.append(group_messages);
 
+        var group_message_editor = $('<div id=message_editor>');
+        group_message_editor.append('<textarea id=send_message_text cols=60 rows=2></textarea>');
+        var send_button = $('<button id=send_message>Send</button>');
+        send_button.button();
+        send_button.click(function() {
+            GrassrootsGroupTab.send_message($('#send_message_text').val());
+        }); 
+        group_message_editor.append(send_button);
+        group_main.append(group_message_editor);
+
         $('#groups_tab_main').replaceWith(group_main);
+        GrassrootsGroupsTab.current_room = room;
+    },
+
+    send_message: function(message_text) {
+        
     },
 
     on_presence: function(presence) {

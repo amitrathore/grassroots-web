@@ -10,7 +10,8 @@
    margin-top: 10%;
    margin-left: 40px;
    font-size: small;
-   background-color: #fef4ed;
+   background-color: #fef4ed
+   background-color: red;
    padding: 4px;
 }
 
@@ -23,9 +24,14 @@
 }
 
 #groups_tab_main {
-   background-color: red;
+   background-color: #E6E6E6;
    width: 75%;
-   float: left;   
+   height: 500px;
+   float: left;
+   overflow: auto;
+   margin-top: 4px;
+   padding-top: 4px;
+   
 }
 
 .owned_group_name {
