@@ -156,7 +156,11 @@ GrassrootsGroupsTab = {
     },
 
     send_message: function(message_text) {
-        GrassrootsUtils.log('GrassrootsGroupsTab: SEND!');        
+        GrassrootsUtils.log('GrassrootsGroupsTab: SEND!');   
+        $('#send_message_text').val('');
+        var full_group_name = GrassrootsUtils.full_group_name(GrassrootsGroupsTab.current_room);
+        var msg = $msg({to: full_group_name, type: "groupchat"}).c('body').t(message_text);
+        Grassroots.connection.send(msg);
     },
 
     on_public_message: function(message) {
