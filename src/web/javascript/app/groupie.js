@@ -262,7 +262,9 @@ $(document).ready(function () {
 
 $(document).bind('connect', function (ev, data) {
     Groupie.connection = new Strophe.Connection(
-        'http://bosh.metajack.im:5280/xmpp-httpbind');
+        //'http://bosh.metajack.im:5280/xmpp-httpbind'
+        "http://lookingglass.local:5280/http-bind"
+);
 
     Groupie.connection.connect(
         data.jid, data.password,
@@ -284,12 +286,9 @@ $(document).bind('connected', function () {
 
     Groupie.connection.send($pres().c('priority').t('-1'));
     
-    Groupie.connection.addHandler(Groupie.on_presence,
-                                  null, "presence");
-    Groupie.connection.addHandler(Groupie.on_public_message,
-                                  null, "message", "groupchat");
-    Groupie.connection.addHandler(Groupie.on_private_message,
-                                  null, "message", "chat");
+    Groupie.connection.addHandler(Groupie.on_presence, null, "presence");
+    Groupie.connection.addHandler(Groupie.on_public_message, null, "message", "groupchat");
+    Groupie.connection.addHandler(Groupie.on_private_message, null, "message", "chat");
 
     Groupie.connection.send(
         $pres({

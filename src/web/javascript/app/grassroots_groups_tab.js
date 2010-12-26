@@ -11,6 +11,7 @@ GrassrootsGroupsTab = {
         GrassrootsGroupsTab.append_toolbar(tabs_content);
         GrassrootsGroupsTab.append_sidebar(tabs_content);
         Grassroots.connection.addHandler(GrassrootsGroupsTab.on_presence, null, "presence");
+        Grassroots.connection.addHandler(GrassrootsGroupsTab.on_public_message, null, "message", "groupchat");
     },
 
     append_toolbar: function(tabs_content) {
@@ -39,7 +40,7 @@ GrassrootsGroupsTab = {
                 "Go!": function() {
                     var group_name = $('#groups_tab_new_group_name').val();
                     $(this).dialog('close');
-                    GrassrootsGroupsTab.create_new_group(group_name);
+                    GrassrootsGroupsTab.send_join_group(group_name);
                 }
             }
         });
@@ -131,7 +132,7 @@ GrassrootsGroupsTab = {
         if (GrassrootsGroupsTab.current_room === room) {
             return true;
         }
-
+        GrassrootsGroupsTab.send_join_group(room);
         GrassrootsGroupsTab.current_room = room;
         var group_main = $('<div id=groups_tab_main>');
         var group_title = $('<div id=group_title>' + room + '</div>');
@@ -145,7 +146,7 @@ GrassrootsGroupsTab = {
         var send_button = $('<button id=send_message>Send</button>');
         send_button.button();
         send_button.click(function() {
-            GrassrootsGroupTab.send_message($('#send_message_text').val());
+            GrassrootsGroupsTab.send_message($('#send_message_text').val());
         }); 
         group_message_editor.append(send_button);
         group_main.append(group_message_editor);
@@ -155,7 +156,43 @@ GrassrootsGroupsTab = {
     },
 
     send_message: function(message_text) {
+        GrassrootsUtils.log('GrassrootsGroupsTab: SEND!');        
+    },
+
+    on_public_message: function(message) {
+        GrassrootsUtils.log('GrassrootsGroupsTab: on_public:');
+        GrassrootsUtils.log(message);
+        var from = $(message).attr('from');
+        var room = Strophe.getBareJidFromJid(from);
+        var nick = Strophe.getResourceFromJid(from);
+
+        var notice = !nick;
         
+        var nick_class = "nick";
+        if (nick === Grassroots.username) {
+            nick_class += " self";
+        }
+        var body = $(message).children('body').text();
+        
+        if (!notice) {
+            GrassrootsGroupsTab.add_message("<div class='message'> &lt;<span class='"
+                                            + nick_class + "'>" + nick 
+                                            + "</span>&gt; <span class='body'>" 
+                                            + body 
+                                            + "</span></div>");
+        }
+        return true;
+    },
+
+    add_message: function (msg) {
+        GrassrootsUtils.log('GrassrootsGroupsTab: add_message:' + msg);
+        var chat = $('#groups_tab_messages');
+        chat.append(msg);
+
+        var at_bottom = chat.scrollTop >= chat.scrollHeight - chat.clientHeight;
+        if (at_bottom) {
+            chat.scrollTop = chat.scrollHeight;
+        }
     },
 
     on_presence: function(presence) {
@@ -176,9 +213,9 @@ GrassrootsGroupsTab = {
         return true;
     },
 
-    create_new_group: function(group_name) {
+    send_join_group: function(group_name) {
         var full_group_name = GrassrootsUtils.full_group_name(group_name);
-        GrassrootsUtils.log('GrassrootsGroupTab: create_new_group: ' + full_group_name);
+        GrassrootsUtils.log('GrassrootsGroupsTab: send_join_group: ' + full_group_name);
 
         var p = $pres({to: full_group_name + "/" + Grassroots.username})
             .c('x', {xmlns: GrassrootsGroupsTab.NS_MUC});
