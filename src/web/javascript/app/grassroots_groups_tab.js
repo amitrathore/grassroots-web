@@ -69,25 +69,28 @@ GrassrootsGroupsTab = {
     },
 
     handle_group_joined: function(presence) {
-        PPP = presence;
         GrassrootsUtils.log('GrassrootsGroupsTab: handle_group_joined!');
         var from = $(presence).attr('from');
         var room = GrassrootsUtils.username_from_jid(from);
         var nick = Strophe.getResourceFromJid(from);
         var room_jid = GrassrootsUtils.room_jid(room, Grassroots.username);
+
+        if (Grassroots.username === room) { //this is not a group related presence
+            return true;
+        }
         GrassrootsUtils.log('GrassrootsGroupsTab: handle_group_joined with room_jid:' + room_jid + ' from:' + from);
 
         if ($(presence).find("status[code='210']").length > 0) {
             nicks[room] = nick;
         }
-
-        if (room_jid === from) { //&& $(presence).attr('type') !== 'unavailable'
+        
+        if (room_jid === from && $(presence).attr('type') !== 'unavailable') { //
             GrassrootsUtils.log('GrassrootsGroupsTab: handle_group_joined: joining ' + room + ' complete!');
             if ($(presence).find("status[code='201']").length > 0) {
                 GrassrootsGroupsTab.configure_room(room);
             }
         }
-        GrassrootsGroupsTab.load_room_if_needed(room);        
+        GrassrootsGroupsTab.load_room_if_needed(room);
         return true;
     },
 
@@ -132,8 +135,8 @@ GrassrootsGroupsTab = {
     },
 
     on_presence: function(presence) {
-        //TODO
         GrassrootsUtils.log('PREZ:' + presence);
+        GrassrootsUtils.log(presence);
         var from = $(presence).attr('from');
         var room = GrassrootsUtils.username_from_jid(from);
         var nick = Strophe.getResourceFromJid(from);
