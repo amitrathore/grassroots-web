@@ -6,10 +6,28 @@
    height: 100%;	
 }
 
-#gr_tabs_toolbar {
+#groups_tabs_toolbar {
    margin-top: 10%;
    margin-left: 40px;
    font-size: small;
    background-color: #fef4ed;
    padding: 4px;
+}
+
+#groups_tab_sidebar {
+   background-color: #e7eef3;
+   width: 23%;
+   float: right;
+   margin: 4px;
+   padding-left: 4px;
+}
+
+#groups_tab_main {
+   background-color: red;
+   width: 75%;
+   float: left;   
+}
+
+.owned_group_name {
+   font-weight: bold;
 }

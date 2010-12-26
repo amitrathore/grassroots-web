@@ -8,8 +8,8 @@ GrassrootsGroupsTab = {
     init: function() {
         GrassrootsUtils.log('GrassrootsGroupsTab: init');
         var tabs_content = $('#gr_tabs_content');
-        this.append_toolbar(tabs_content);
-        this.append_owned_groups(tabs_content);
+        GrassrootsGroupsTab.append_toolbar(tabs_content);
+        GrassrootsGroupsTab.append_sidebar(tabs_content);
         Grassroots.connection.addHandler(GrassrootsGroupsTab.on_presence, null, "presence");
     },
 
@@ -45,9 +45,27 @@ GrassrootsGroupsTab = {
         });
     },
     
-    append_owned_groups: function(tabs_content) {
+    append_sidebar: function(tabs_content) {
         GrassrootsUtils.log('GrassrootsGroupsTab: append_owned_groups');
-        // $.get() 
+        var sidebar = $('<div id=groups_tab_sidebar></div>');
+        tabs_content.append(sidebar); 
+
+        var groups_list_url = Grassroots.web_url + "/groups";
+        $.get(groups_list_url, {username: Grassroots.username}, function(groups_list_string) {
+            GrassrootsUtils.log('GrassrootsGroupsTab: group_list callback');
+            Grassroots.group_names = GrassrootsUtils.to_json(groups_list_string);
+            GrassrootsGroupsTab.refresh_side_bar();
+        });
+    },
+
+    refresh_side_bar: function() {
+        var sidebar = $('#groups_tab_sidebar');
+        sidebar.empty();
+        sidebar.append($('<h2>Your groups</h2>'));
+        $.each(Grassroots.group_names, function(i, full_name) {
+            var group_item = $('<div class=owned_group_name>').text(GrassrootsUtils.username_from_jid(full_name));
+            sidebar.append(group_item);
+        });
     },
 
     handle_group_joined: function(presence) {
@@ -69,8 +87,7 @@ GrassrootsGroupsTab = {
                 GrassrootsGroupsTab.configure_room(room);
             }
         }
-
-        GrassrootsGroupsTab.load_room_if_needed(room_name);        
+        GrassrootsGroupsTab.load_room_if_needed(room);        
         return true;
     },
 
@@ -80,13 +97,20 @@ GrassrootsGroupsTab = {
         var config_data = {
             id: GrassrootsUtils.make_id(),
             to: GrassrootsUtils.full_group_name(room_name),
+            username: Grassroots.username,
             roomname: GrassrootsUtils.full_group_name(room_name),
             roomdesc: room_name + " room for Grassroots."
         };
-        $.get(muc_config_url, config_data, function(config_xml) {
+        $.get(muc_config_url, config_data, function(creation_result_string) {
             GrassrootsUtils.log('GrassrootsGroupsTab: configure_room: callback!');
-            GrassrootsGroupsTab.joined_rooms[room_name] = true;
-            Grassroots.connection.send($(config_xml));
+            var creation = GrassrootsUtils.to_json(creation_result_string);
+            if (creation.result === true) {
+                GrassrootsGroupsTab.joined_rooms[room_name] = true;
+                Grassroots.connection.send($(creation.config));
+            }
+            else {
+                alert('Unable to create group!');
+            }
         });
     },
 
