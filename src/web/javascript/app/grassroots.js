@@ -1,7 +1,7 @@
 Grassroots = {
-    bosh_http_url: "http://lookingglass.local:5280/http-bind",
-    web_url: "http://grassrootsweb.com/api",
-    ubernet_domain: "lookingglass.local",
-    ubernet_conf: "conference.lookingglass.local",
+    bosh_http_url: "http://chatter.currylogic.com:5280/http-bind",
+    web_url: "http://grassroots.currylogic.com/api",
+    ubernet_domain: "chatter.currylogic.com",
+    ubernet_conf: "conference.chatter.currylogic.com",
     roster: {}
 };
