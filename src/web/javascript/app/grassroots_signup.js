@@ -23,7 +23,7 @@ GrassrootsSignup = {
     },
     
     process_signup: function(ev, creds) {
-        var user_url = Grassroots.web_url + "/user";
+        var user_url = Grassroots.web_url() + "/user";
         $.post(user_url, creds, function(data_string) {
             var data = GrassrootsUtils.to_json(data_string);
             GrassrootsUtils.log("GrassrootsSignup: process_signup: new user creation:" + data);

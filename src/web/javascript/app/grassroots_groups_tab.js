@@ -51,7 +51,7 @@ GrassrootsGroupsTab = {
         var sidebar = $('<div id=groups_tab_sidebar></div>');
         tabs_content.append(sidebar); 
 
-        var groups_list_url = Grassroots.web_url + "/groups";
+        var groups_list_url = Grassroots.web_url() + "/groups";
         $.get(groups_list_url, {username: Grassroots.username}, function(groups_list_string) {
             GrassrootsUtils.log('GrassrootsGroupsTab: group_list callback');
             Grassroots.group_names = GrassrootsUtils.to_json(groups_list_string);
@@ -106,7 +106,7 @@ GrassrootsGroupsTab = {
 
     configure_room: function(room_name) {
         GrassrootsUtils.log('GrassrootsGroupsTab: configure_room');
-        var muc_config_url = Grassroots.web_url + "/room_config";
+        var muc_config_url = Grassroots.web_url() + "/room_config";
         var config_data = {
             id: GrassrootsUtils.make_id(),
             to: GrassrootsUtils.full_group_name(room_name),

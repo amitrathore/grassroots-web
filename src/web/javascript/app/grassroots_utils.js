@@ -14,11 +14,11 @@ GrassrootsUtils = {
     },
 
     room_jid: function(room_name, nick_name) {
-        return room_name + "@" + Grassroots.ubernet_conf + "/" + nick_name;
+        return room_name + "@" + Grassroots.ubernet_conf() + "/" + nick_name;
     },
 
     full_group_name: function(group_name) {
-        return group_name + "@" + Grassroots.ubernet_conf;
+        return group_name + "@" + Grassroots.ubernet_conf();
     },
 
     make_id: function() {

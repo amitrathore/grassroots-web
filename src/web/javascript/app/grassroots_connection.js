@@ -1,11 +1,11 @@
 GrassrootsConnection = {
     new_connection: function() {
         GrassrootsUtils.log('GrassrootsConnection: new');
-        return new Strophe.Connection(Grassroots.bosh_http_url);
+        return new Strophe.Connection(Grassroots.bosh_http_url());
     },
 
     process_login: function(ev, data) {
-        data.jid = data.jid + "@" + Grassroots.ubernet_domain;
+        data.jid = data.jid + "@" + Grassroots.ubernet_domain();
         this.login(data.jid, data.password, 'connected', 'disconnected');
     },
 
