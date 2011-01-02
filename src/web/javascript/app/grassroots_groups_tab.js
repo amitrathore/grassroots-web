@@ -39,6 +39,7 @@ GrassrootsGroupsTab = {
             buttons: {
                 "Go!": function() {
                     var group_name = $('#groups_tab_new_group_name').val();
+                    group_name = GrassrootsUtils.qualified_group_name(group_name);
                     $(this).dialog('close');
                     GrassrootsGroupsTab.send_join_group(group_name);
                 }
@@ -64,10 +65,11 @@ GrassrootsGroupsTab = {
         sidebar.empty();
         sidebar.append($('<h2>Your groups</h2>'));
         $.each(Grassroots.group_names, function(i, full_name) {
-            var group_name = GrassrootsUtils.username_from_jid(full_name);
-            var group_item = $('<div class=owned_group_name>').text(group_name);
+            var qualified_group_name = GrassrootsUtils.username_from_jid(full_name);
+            var display_group_name = GrassrootsUtils.unqualified_group_name(qualified_group_name);
+            var group_item = $('<div class=owned_group_name>').text(display_group_name);
             group_item.click(function () {
-                GrassrootsGroupsTab.switch_to_group(group_name)
+                GrassrootsGroupsTab.switch_to_group(qualified_group_name);
             });
             sidebar.append(group_item);
         });
@@ -135,7 +137,7 @@ GrassrootsGroupsTab = {
         GrassrootsGroupsTab.send_join_group(room);
         GrassrootsGroupsTab.current_room = room;
         var group_main = $('<div id=groups_tab_main>');
-        var group_title = $('<div id=group_title>' + room + '</div>');
+        var group_title = $('<div id=group_title>' + GrassrootsUtils.unqualified_group_name(room) + '</div>');
         group_main.append(group_title);
 
         var group_messages = $('<div id=groups_tab_messages>');
@@ -152,7 +154,6 @@ GrassrootsGroupsTab = {
         group_main.append(group_message_editor);
 
         $('#groups_tab_main').replaceWith(group_main);
-        GrassrootsGroupsTab.current_room = room;
     },
 
     send_message: function(message_text) {
